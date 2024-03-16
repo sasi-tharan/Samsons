@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 04, 2024 at 12:21 PM
+-- Generation Time: Mar 16, 2024 at 07:02 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -20,6 +20,29 @@ SET time_zone = "+00:00";
 --
 -- Database: `ecommerce`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `banners`
+--
+
+CREATE TABLE `banners` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `description` mediumtext DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `status` tinyint(4) NOT NULL DEFAULT 0 COMMENT '1=hidden,0=visible',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `banners`
+--
+
+INSERT INTO `banners` (`id`, `title`, `description`, `image`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'ddd', 'dddd', 'uploads/banner/1710495689.jpg', 0, '2024-03-15 04:11:29', '2024-03-15 04:11:29');
 
 -- --------------------------------------------------------
 
@@ -65,27 +88,25 @@ CREATE TABLE `failed_jobs` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `group`
+-- Table structure for table `groups`
 --
 
-CREATE TABLE `group` (
+CREATE TABLE `groups` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `department_id` bigint(20) UNSIGNED NOT NULL,
   `group_title` varchar(255) NOT NULL,
-  `image` varchar(255) NOT NULL,
   `status` varchar(255) DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `group`
+-- Dumping data for table `groups`
 --
 
-INSERT INTO `group` (`id`, `department_id`, `group_title`, `image`, `status`, `created_at`, `updated_at`) VALUES
-(5, 7, 'main group 2', 'uploads/groups/1709282413.jpg', '0', '2024-02-29 01:14:12', '2024-03-01 03:10:13'),
-(6, 7, 'dddd', 'uploads/groups/1709282401.jpg', '0', '2024-03-01 03:08:36', '2024-03-01 03:10:01'),
-(8, 5, 'dddd', 'uploads/groups/1709550866.jpg', '0', '2024-03-04 05:44:26', '2024-03-04 05:44:26');
+INSERT INTO `groups` (`id`, `department_id`, `group_title`, `status`, `image`, `created_at`, `updated_at`) VALUES
+(1, 5, 'apple', '0', 'uploads/groups/1710486771.jpg', '2024-03-15 01:42:51', '2024-03-15 01:42:51');
 
 -- --------------------------------------------------------
 
@@ -122,7 +143,16 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (16, '2024_02_29_122816_create_products_table', 9),
 (17, '2024_02_29_123952_create_product_thumbnails_table', 10),
 (18, '2024_02_29_124111_create_product_images_table', 11),
-(19, '2024_03_01_083349_add_image_to_group_table', 12);
+(19, '2024_03_01_083349_add_image_to_group_table', 12),
+(20, '2024_03_15_063936_create_products_table', 13),
+(21, '2024_03_15_064623_add_additional_columns_to_products_table', 14),
+(22, '2024_03_15_070824_create_groups_table', 15),
+(23, '2024_03_15_071216_add_image_to_groups_table', 16),
+(24, '2024_03_15_094031_create_banners_table', 17),
+(25, '2024_03_16_045144_create_sub_groups_table', 18),
+(26, '2024_03_16_053452_rename_group_foreign_key_in_products_table', 19),
+(27, '2024_03_16_054451_add_sub_group_columns_to_products_table', 20),
+(28, '2024_03_16_055035_add_status_to_products_table', 21);
 
 -- --------------------------------------------------------
 
@@ -175,56 +205,57 @@ CREATE TABLE `personal_access_tokens` (
 
 CREATE TABLE `products` (
   `id` bigint(20) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `si_upc` varchar(255) DEFAULT NULL,
+  `barcode_sku` varchar(255) DEFAULT NULL,
+  `b_m` varchar(255) DEFAULT NULL,
+  `product_name` varchar(255) DEFAULT NULL,
+  `product_description` text DEFAULT NULL,
   `department_id` bigint(20) UNSIGNED NOT NULL,
   `group_id` bigint(20) UNSIGNED NOT NULL,
   `sub_group_id` bigint(20) UNSIGNED NOT NULL,
-  `sku` varchar(255) NOT NULL,
-  `barcode` varchar(255) DEFAULT NULL,
-  `brand` varchar(255) DEFAULT NULL,
-  `product_name` text NOT NULL,
-  `description` text NOT NULL,
-  `sg_1` varchar(255) DEFAULT NULL,
-  `sg_2` varchar(255) DEFAULT NULL,
-  `sg_3` varchar(255) DEFAULT NULL,
-  `capacity` varchar(255) DEFAULT NULL,
-  `units` varchar(255) DEFAULT NULL,
-  `case` varchar(255) DEFAULT NULL,
-  `dimension` varchar(255) DEFAULT NULL,
-  `supplier_info` varchar(255) DEFAULT NULL,
-  `cost_price_before_vat` varchar(255) DEFAULT NULL,
-  `inventory_status` varchar(255) DEFAULT NULL,
-  `location` varchar(255) DEFAULT NULL,
-  `age_restricted` varchar(255) DEFAULT NULL,
-  `price_wsp` varchar(255) DEFAULT NULL,
+  `kg_ml` varchar(255) DEFAULT NULL,
+  `units` int(11) DEFAULT NULL,
+  `ps` varchar(255) DEFAULT NULL,
+  `case` int(11) DEFAULT NULL,
+  `dimensions` varchar(255) DEFAULT NULL,
+  `cp_vat` varchar(255) DEFAULT NULL,
+  `is` varchar(255) DEFAULT NULL,
+  `lo` varchar(255) DEFAULT NULL,
+  `ar` varchar(255) DEFAULT NULL,
   `vat` varchar(255) DEFAULT NULL,
-  `profit_margin` varchar(255) DEFAULT NULL,
-  `rrp` varchar(255) DEFAULT NULL,
-  `reseller_margin` varchar(255) DEFAULT NULL,
-  `trending` tinyint(4) NOT NULL DEFAULT 0 COMMENT '1=trending,0=not-trending',
-  `featured` tinyint(4) NOT NULL DEFAULT 0 COMMENT '1=featured,0=not-featured',
-  `status` tinyint(4) NOT NULL DEFAULT 0 COMMENT '1=hidden,0=visible',
-  `meta_title` varchar(255) DEFAULT NULL,
-  `meta_keyword` mediumtext DEFAULT NULL,
-  `meta_description` mediumtext DEFAULT NULL,
-  `bulk_category_1` varchar(255) DEFAULT NULL,
-  `bulk_category_price_1` varchar(255) DEFAULT NULL,
-  `bulk_category_2` varchar(255) DEFAULT NULL,
-  `bulk_category_price_2` varchar(255) DEFAULT NULL,
-  `bulk_category_3` varchar(255) DEFAULT NULL,
-  `bulk_category_price_3` varchar(255) DEFAULT NULL,
+  `wscp_vat` varchar(255) DEFAULT NULL,
+  `samson_percent` varchar(255) DEFAULT NULL,
+  `unit_rrp` varchar(255) DEFAULT NULL,
+  `rupm` varchar(255) DEFAULT NULL,
+  `bcqty_1` int(11) DEFAULT NULL,
+  `bcp_1` varchar(255) DEFAULT NULL,
+  `b_percent_1` varchar(255) DEFAULT NULL,
+  `bcqty_2` int(11) DEFAULT NULL,
+  `bcp_2` varchar(255) DEFAULT NULL,
+  `b_percent_2` varchar(255) DEFAULT NULL,
+  `bcqty_3` int(11) DEFAULT NULL,
+  `bcp_3` varchar(255) DEFAULT NULL,
+  `b_percent_3` varchar(255) DEFAULT NULL,
   `linked_item_1` varchar(255) DEFAULT NULL,
   `linked_item_2` varchar(255) DEFAULT NULL,
   `linked_item_3` varchar(255) DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `status` enum('active','inactive') NOT NULL DEFAULT 'inactive',
+  `sub_group_id_1` bigint(20) UNSIGNED DEFAULT NULL,
+  `sub_group_id_2` bigint(20) UNSIGNED DEFAULT NULL,
+  `sub_group_id_3` bigint(20) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `products`
 --
 
-INSERT INTO `products` (`id`, `department_id`, `group_id`, `sub_group_id`, `sku`, `barcode`, `brand`, `product_name`, `description`, `sg_1`, `sg_2`, `sg_3`, `capacity`, `units`, `case`, `dimension`, `supplier_info`, `cost_price_before_vat`, `inventory_status`, `location`, `age_restricted`, `price_wsp`, `vat`, `profit_margin`, `rrp`, `reseller_margin`, `trending`, `featured`, `status`, `meta_title`, `meta_keyword`, `meta_description`, `bulk_category_1`, `bulk_category_price_1`, `bulk_category_2`, `bulk_category_price_2`, `bulk_category_3`, `bulk_category_price_3`, `linked_item_1`, `linked_item_2`, `linked_item_3`, `created_at`, `updated_at`) VALUES
-(8, 5, 6, 12, 'dd333333333333', '3333333333333333', 'dd', 'dd', 'ddd', 'dd', 'dd', 'ddd', 'dd', 'dd', 'dd', 'dd', 'dd', '33', '33', '33333', '33', '33', '33', '33', '33', '33', 1, 1, 1, NULL, NULL, NULL, 'sd', '33', 'dsds', '333', 'fdfd', '333', 'ddd', 'ddd', 'ddd', '2024-03-04 05:48:16', '2024-03-04 05:48:16');
+INSERT INTO `products` (`id`, `created_at`, `updated_at`, `si_upc`, `barcode_sku`, `b_m`, `product_name`, `product_description`, `department_id`, `group_id`, `sub_group_id`, `kg_ml`, `units`, `ps`, `case`, `dimensions`, `cp_vat`, `is`, `lo`, `ar`, `vat`, `wscp_vat`, `samson_percent`, `unit_rrp`, `rupm`, `bcqty_1`, `bcp_1`, `b_percent_1`, `bcqty_2`, `bcp_2`, `b_percent_2`, `bcqty_3`, `bcp_3`, `b_percent_3`, `linked_item_1`, `linked_item_2`, `linked_item_3`, `status`, `sub_group_id_1`, `sub_group_id_2`, `sub_group_id_3`) VALUES
+(2, '2024-03-16 00:06:08', '2024-03-16 00:06:08', '515F5151FDF', '123456849521', 'GmbH', 'Redbull', 'Water, Sucrose, Glucose', 6, 1, 3, '250ml', 24, '1', 100, '2', '18', '2', '3', '3', '5', '4', '15', '3', '33', 3, '33', '33', 33, '33', '3', 33, '33', '333', 'fff', 'fff', 'ffff', 'inactive', NULL, NULL, NULL),
+(3, '2024-03-16 00:11:11', '2024-03-16 00:11:11', '515F5151FDF', '123456849521', 'GmbH', 'Album Block Bind Normal', 'dddddddddddddddddddddddd', 5, 1, 1, '250ml', 24, '1', 100, '2', '18', '2', '3', '3', '3', '4', '15', '3', '33', 3, '33', '33', 33, '33', '3', 33, '33', '333', 'dd', 'sad', 'ee', 'inactive', NULL, NULL, NULL),
+(4, '2024-03-16 00:19:35', '2024-03-16 00:19:35', '515F5151FDF', '123456849521', 'GmbH', 'Nokia Battery b4', 'ddeeeeeeeeeeeeeeeeeeeeee', 4, 1, 1, '250ml', 3, '1', 3, '3', '3', '3', '3', '3', '3', '3', '3', '3', '3', 3, '3', '3', 3, '3', '3', 3, '3', '3', 'dd', 'ddd', 'dd', 'inactive', 3, 3, 4),
+(5, '2024-03-16 00:24:37', '2024-03-16 00:24:37', '515F5151FDF', '123456849521', 'GmbH', 'Album Block Bind Normal', 'fffggvvvv', 4, 1, 3, '250ml', 24, '1', 3, '33', '33', '33', '33', '33', '33', '33', '33', '33', '33', 33, '33', '33', 33, '33', '33', 33, '33', '33', 'sd', 'sad', 'ee', 'active', 3, 3, 4);
 
 -- --------------------------------------------------------
 
@@ -246,7 +277,10 @@ CREATE TABLE `product_images` (
 
 INSERT INTO `product_images` (`id`, `product_id`, `large_image`, `created_at`, `updated_at`) VALUES
 (12, 8, 'uploads/product_large/17095510961.jpg', '2024-03-04 05:48:16', '2024-03-04 05:48:16'),
-(13, 8, 'uploads/product_large/17095510962.jpg', '2024-03-04 05:48:16', '2024-03-04 05:48:16');
+(13, 8, 'uploads/product_large/17095510962.jpg', '2024-03-04 05:48:16', '2024-03-04 05:48:16'),
+(14, 3, 'uploads/product_large/g9WfgFqOvzfo4aC1XOTZaHHDdC37WUSkJwdU8j34.jpg', '2024-03-16 00:11:11', '2024-03-16 00:11:11'),
+(15, 4, 'uploads/product_large/T2FmcWbDryb84PGtlXhdvsWDITDs0qMfGfziAkLe.png', '2024-03-16 00:19:35', '2024-03-16 00:19:35'),
+(16, 5, 'uploads/product_large/bsxSmT2dgLIcJRYYUOuWuCxpt1eFlmPdJNDGUSLI.jpg', '2024-03-16 00:24:37', '2024-03-16 00:24:37');
 
 -- --------------------------------------------------------
 
@@ -269,7 +303,10 @@ CREATE TABLE `product_thumbnails` (
 INSERT INTO `product_thumbnails` (`id`, `product_id`, `image`, `created_at`, `updated_at`) VALUES
 (11, 8, 'uploads/product_thumbnail/17095510961.jpg', '2024-03-04 05:48:16', '2024-03-04 05:48:16'),
 (12, 8, 'uploads/product_thumbnail/17095510962.jpg', '2024-03-04 05:48:16', '2024-03-04 05:48:16'),
-(13, 8, 'uploads/product_thumbnail/17095510963.jpg', '2024-03-04 05:48:16', '2024-03-04 05:48:16');
+(13, 8, 'uploads/product_thumbnail/17095510963.jpg', '2024-03-04 05:48:16', '2024-03-04 05:48:16'),
+(14, 3, 'uploads/product_thumbnail/ZpySznGUX6qWUqLmiFPfD5BIaBmUs6zq21Kbj1Dj.jpg', '2024-03-16 00:11:11', '2024-03-16 00:11:11'),
+(15, 4, 'uploads/product_thumbnail/iIXoRZQ6V55cmBYHa9LZKy8yBCCcuJzaMtqMwV0R.jpg', '2024-03-16 00:19:35', '2024-03-16 00:19:35'),
+(16, 5, 'uploads/product_thumbnail/JRbUiU6Y2AlstTuepmaZKaXGp2q1QlE1hVrE3bFs.jpg', '2024-03-16 00:24:37', '2024-03-16 00:24:37');
 
 -- --------------------------------------------------------
 
@@ -319,7 +356,6 @@ CREATE TABLE `sub_groups` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `group_id` bigint(20) UNSIGNED NOT NULL,
   `sub_group_title` varchar(255) NOT NULL,
-  `image` varchar(255) NOT NULL,
   `status` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -329,8 +365,10 @@ CREATE TABLE `sub_groups` (
 -- Dumping data for table `sub_groups`
 --
 
-INSERT INTO `sub_groups` (`id`, `group_id`, `sub_group_title`, `image`, `status`, `created_at`, `updated_at`) VALUES
-(12, 6, 'xxx', 'uploads/sub_groups/1709551006.jpg', '0', '2024-03-04 05:46:46', '2024-03-04 05:46:46');
+INSERT INTO `sub_groups` (`id`, `group_id`, `sub_group_title`, `status`, `created_at`, `updated_at`) VALUES
+(1, 1, 'ssssrrrr', 'Inactive', '2024-03-15 23:25:09', '2024-03-15 23:54:57'),
+(3, 1, 'dddd', 'Active', '2024-03-15 23:49:25', '2024-03-15 23:49:25'),
+(4, 1, 'wssss', 'Inactive', '2024-03-15 23:50:14', '2024-03-15 23:50:14');
 
 -- --------------------------------------------------------
 
@@ -364,6 +402,12 @@ INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `re
 --
 
 --
+-- Indexes for table `banners`
+--
+ALTER TABLE `banners`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `departments`
 --
 ALTER TABLE `departments`
@@ -377,11 +421,11 @@ ALTER TABLE `failed_jobs`
   ADD UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`);
 
 --
--- Indexes for table `group`
+-- Indexes for table `groups`
 --
-ALTER TABLE `group`
+ALTER TABLE `groups`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `group_department_id_foreign` (`department_id`);
+  ADD KEY `groups_department_id_foreign` (`department_id`);
 
 --
 -- Indexes for table `migrations`
@@ -415,8 +459,11 @@ ALTER TABLE `personal_access_tokens`
 ALTER TABLE `products`
   ADD PRIMARY KEY (`id`),
   ADD KEY `products_department_id_foreign` (`department_id`),
+  ADD KEY `products_sub_group_id_foreign` (`sub_group_id`),
   ADD KEY `products_group_id_foreign` (`group_id`),
-  ADD KEY `products_sub_group_id_foreign` (`sub_group_id`);
+  ADD KEY `products_sub_group_id_1_foreign` (`sub_group_id_1`),
+  ADD KEY `products_sub_group_id_2_foreign` (`sub_group_id_2`),
+  ADD KEY `products_sub_group_id_3_foreign` (`sub_group_id_3`);
 
 --
 -- Indexes for table `product_images`
@@ -449,7 +496,7 @@ ALTER TABLE `sliders`
 --
 ALTER TABLE `sub_groups`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `sub_group_group_id_foreign` (`group_id`);
+  ADD KEY `sub_groups_group_id_foreign` (`group_id`);
 
 --
 -- Indexes for table `users`
@@ -461,6 +508,12 @@ ALTER TABLE `users`
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `banners`
+--
+ALTER TABLE `banners`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `departments`
@@ -475,16 +528,16 @@ ALTER TABLE `failed_jobs`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `group`
+-- AUTO_INCREMENT for table `groups`
 --
-ALTER TABLE `group`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+ALTER TABLE `groups`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
@@ -496,19 +549,19 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `product_images`
 --
 ALTER TABLE `product_images`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `product_thumbnails`
 --
 ALTER TABLE `product_thumbnails`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `roles`
@@ -526,7 +579,7 @@ ALTER TABLE `sliders`
 -- AUTO_INCREMENT for table `sub_groups`
 --
 ALTER TABLE `sub_groups`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -539,17 +592,20 @@ ALTER TABLE `users`
 --
 
 --
--- Constraints for table `group`
+-- Constraints for table `groups`
 --
-ALTER TABLE `group`
-  ADD CONSTRAINT `group_department_id_foreign` FOREIGN KEY (`department_id`) REFERENCES `departments` (`id`);
+ALTER TABLE `groups`
+  ADD CONSTRAINT `groups_department_id_foreign` FOREIGN KEY (`department_id`) REFERENCES `departments` (`id`);
 
 --
 -- Constraints for table `products`
 --
 ALTER TABLE `products`
   ADD CONSTRAINT `products_department_id_foreign` FOREIGN KEY (`department_id`) REFERENCES `departments` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `products_group_id_foreign` FOREIGN KEY (`group_id`) REFERENCES `group` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `products_group_id_foreign` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `products_sub_group_id_1_foreign` FOREIGN KEY (`sub_group_id_1`) REFERENCES `sub_groups` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `products_sub_group_id_2_foreign` FOREIGN KEY (`sub_group_id_2`) REFERENCES `sub_groups` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `products_sub_group_id_3_foreign` FOREIGN KEY (`sub_group_id_3`) REFERENCES `sub_groups` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `products_sub_group_id_foreign` FOREIGN KEY (`sub_group_id`) REFERENCES `sub_groups` (`id`) ON DELETE CASCADE;
 
 --
@@ -568,7 +624,7 @@ ALTER TABLE `product_thumbnails`
 -- Constraints for table `sub_groups`
 --
 ALTER TABLE `sub_groups`
-  ADD CONSTRAINT `sub_group_group_id_foreign` FOREIGN KEY (`group_id`) REFERENCES `group` (`id`);
+  ADD CONSTRAINT `sub_groups_group_id_foreign` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
