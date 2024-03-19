@@ -7,6 +7,8 @@ use App\Models\Product;
 use App\Models\SubGroup;
 use App\Models\Department;
 use Illuminate\Http\Request;
+use App\Exports\ProductExport;
+use App\Imports\ProductImport;
 use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -33,52 +35,49 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-        // Validate the form data
-        $request->validate([
-            'department_id' => 'required|exists:departments,id',
-            'group_id' => 'required|exists:groups,id',
-            'sub_group_id' => 'required|exists:sub_groups,id',
-            'sub_group_id_1' => 'nullable|exists:sub_groups,id',
-            'sub_group_id_2' => 'nullable|exists:sub_groups,id',
-            'sub_group_id_3' => 'nullable|exists:sub_groups,id',
-            'si_upc' => 'nullable',
-            'barcode_sku' => 'nullable',
-            'b_m' => 'nullable',
-            'product_name' => 'required',
-            'product_description' => 'required',
-            'kg_ml' => 'nullable',
-            'units' => 'nullable|integer',
-            'ps' => 'nullable',
-            'case' => 'nullable',
-            'dimensions' => 'nullable',
-            'cp_vat' => 'nullable',
-            'is' => 'nullable',
-            'lo' => 'nullable',
-            'ar' => 'nullable',
-            'vat' => 'nullable',
-            'wscp_vat' => 'nullable',
-            'samson_percent' => 'nullable',
-            'unit_rrp' => 'nullable',
-            'rupm' => 'nullable',
-            'bcqty_1' => 'nullable|integer',
-            'bcp_1' => 'nullable',
-            'b_percent_1' => 'nullable',
-            'bcqty_2' => 'nullable|integer',
-            'bcp_2' => 'nullable',
-            'b_percent_2' => 'nullable',
-            'bcqty_3' => 'nullable|integer',
-            'bcp_3' => 'nullable',
-            'b_percent_3' => 'nullable',
-            'linked_item_1' => 'nullable',
-            'linked_item_2' => 'nullable',
-            'linked_item_3' => 'nullable',
-            'image.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Assuming max file size is 2MB
-            'large_image.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'status' => 'nullable|in:active,inactive',
-        ]);
-
         // Create a new product with the validated data
-        $product = Product::create($request->all());
+        $product = Product::create([
+            'department_id' => $request->department_id,
+            'group_id' => $request->group_id,
+            'sub_group_id' => $request->sub_group_id,
+            'sub_group_id_1' => $request->sub_group_id_1,
+            'sub_group_id_2' => $request->sub_group_id_2,
+            'sub_group_id_3' => $request->sub_group_id_3,
+            'si_upc' => $request->si_upc,
+            'barcode_sku' => $request->barcode_sku,
+            'b_m' => $request->b_m,
+            'product_name' => $request->product_name,
+            'product_description' => $request->product_description,
+            'kg_ml' => $request->kg_ml,
+            'units' => $request->units,
+            'ps' => $request->ps,
+            'case' => $request->case,
+            'dimensions' => $request->dimensions,
+            'cp_vat' => $request->cp_vat,
+            'is' => $request->is,
+            'lo' => $request->lo,
+            'ar' => $request->ar,
+            'vat' => $request->vat,
+            'wscp_vat' => $request->wscp_vat,
+            'samson_percent' => $request->samson_percent,
+            'unit_rrp' => $request->unit_rrp,
+            'rupm' => $request->rupm,
+            'bcqty_1' => $request->bcqty_1,
+            'bcp_1' => $request->bcp_1,
+            'b_percent_1' => $request->b_percent_1,
+            'bcqty_2' => $request->bcqty_2,
+            'bcp_2' => $request->bcp_2,
+            'b_percent_2' => $request->b_percent_2,
+            'bcqty_3' => $request->bcqty_3,
+            'bcp_3' => $request->bcp_3,
+            'b_percent_3' => $request->b_percent_3,
+            'linked_item_1' => $request->linked_item_1,
+            'linked_item_2' => $request->linked_item_2,
+            'linked_item_3' => $request->linked_item_3,
+            'status' => $request->status,
+            'trending' => $request->trending == true ? '1' : '0',
+            'featured' => $request->featured == true ? '1' : '0',
+        ]);
 
         // Handle product thumbnails upload
         if ($request->hasFile('image')) {
@@ -111,6 +110,24 @@ class ProductController extends Controller
         return view('admin.products.edit', compact('product', 'departments', 'groups', 'subGroups'));
     }
 
-  
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls',
+        ]);
+
+        $file = $request->file('file');
+
+        // Import Excel file data using Maatwebsite Excel
+        Excel::import(new ProductImport, $file);
+
+        return redirect('/admin/products')->with('success', 'Product data imported successfully');
+    }
+
+    public function export()
+    {
+        return Excel::download(new ProductExport(), 'products.xlsx');
+    }
+
 
 }

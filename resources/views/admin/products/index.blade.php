@@ -25,9 +25,10 @@
                             <button class="btn btn-info btn-sm text-white me-2" onclick="location.reload()">
                                 Refresh
                             </button>
-                            <a href="#" class="btn btn-success btn-sm text-white me-2">
+                            <a href="{{ route('export.products') }}" class="btn btn-success btn-sm text-white me-2">
                                 Export
                             </a>
+
                             <!-- New form for importing user data -->
                             <div class="d-inline-block">
                                 <!-- Wrap form elements in a div with appropriate classes -->
@@ -106,14 +107,17 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Add event listener to the "select all" checkbox
-        document.getElementById('selectAllCheckbox').addEventListener('change', function() {
-            // Get all checkboxes in the table body
-            var checkboxes = document.querySelectorAll('tbody input[type="checkbox"]');
-            // Set the checked property of each checkbox to match the "select all" checkbox
-            checkboxes.forEach(function(checkbox) {
-                checkbox.checked = this.checked;
-            }, this);
-        });
+        var selectAllCheckbox = document.getElementById('selectAllCheckbox');
+        if (selectAllCheckbox) {
+            selectAllCheckbox.addEventListener('change', function() {
+                // Get all checkboxes in the table body
+                var checkboxes = document.querySelectorAll('tbody input[type="checkbox"]');
+                // Set the checked property of each checkbox to match the "select all" checkbox
+                checkboxes.forEach(function(checkbox) {
+                    checkbox.checked = selectAllCheckbox.checked;
+                });
+            });
+        }
     });
 </script>
 

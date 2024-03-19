@@ -222,7 +222,14 @@
                                 </div>
                             </div>
 
-
+                            <div class="col-md-4 mb-3">
+                                    <label for="">Trending</label>
+                                    <input type="checkbox" name="trending" style="width: 50px; height: 50px;">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                    <label for="">Featured</label>
+                                    <input type="checkbox" name="featured" style="width: 50px; height: 50px;">
+                            </div>
                             <div class="col-md-4 mb-3">
                                 <label for="">Status</label>
                                 <select name="status" id="status" class="form-control">

@@ -52,8 +52,14 @@ class Product extends Model
         'linked_item_2',
         'linked_item_3',
         'status',
+        'trending', // Added trending column
+        'featured', // Added featured column
     ];
 
+    protected $casts = [
+        'trending' => 'boolean', // Cast trending to boolean
+        'featured' => 'boolean', // Cast featured to boolean
+    ];
 
     public function department()
     {
@@ -81,5 +87,20 @@ class Product extends Model
     public function productThumbnails()
     {
         return $this->hasMany(ProductThumbnail::class, 'product_id', 'id');
+    }
+
+    public function getImageUrlsAttribute()
+    {
+        return $this->productImages->pluck('url')->implode(',');
+    }
+
+    /**
+     * Accessor for getting thumbnail URLs associated with the product.
+     *
+     * @return string
+     */
+    public function getThumbnailUrlsAttribute()
+    {
+        return $this->productThumbnails->pluck('url')->implode(',');
     }
 }

@@ -109,5 +109,6 @@ Route::prefix('admin')->group(function () {
     });
 
     Route::post('/admin/products/import', [ProductController::class, 'import'])->name('admin.products.import');
+    Route::get('/export-products', [ProductController::class, 'export'])->name('export.products');
 
 });
