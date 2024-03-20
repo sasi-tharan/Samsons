@@ -72,23 +72,26 @@
                                     <td>{{ $product->product_description }}</td>
                                     <td>{{ $product->status ? 'Active' : 'Inactive' }}</td>
                                     <td>
+                                        <!-- View Icon -->
+                                        <a href="{{ route('admin.products.show', $product->id) }}" class="text-primary" title="View">
+                                            <i class="mdi mdi-eye"></i>
+                                        </a>
+
                                         <!-- Edit Icon -->
-                                        <a href="{{ route('admin.products.edit', $product->id) }}" class="text-success"
-                                            title="Edit">
+                                        <a href="{{ route('admin.products.edit', $product->id) }}" class="text-success" title="Edit">
                                             <i class="mdi mdi-pencil"></i>
                                         </a>
 
                                         <!-- Delete Icon with Confirmation -->
-                                        <form action="{{ url('admin/products/' . $product->id) }}" method="POST"
-                                            style="display: inline;">
+                                        <form action="{{ url('admin/products/' . $product->id) }}" method="POST" style="display: inline;">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="text-danger" title="Delete"
-                                                onclick="return confirm('Are you sure you want to delete this product?')">
+                                            <button type="submit" class="text-danger" title="Delete" onclick="return confirm('Are you sure you want to delete this product?')">
                                                 <i class="mdi mdi-delete"></i>
                                             </button>
                                         </form>
                                     </td>
+
                                 </tr>
                             @empty
                                 <tr>

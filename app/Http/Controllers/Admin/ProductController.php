@@ -87,12 +87,12 @@ class ProductController extends Controller
             }
         }
 
-        // Handle product images upload
+        // Handle large image upload
         if ($request->hasFile('large_image')) {
-            foreach ($request->file('large_image') as $largeImage) {
-                $path = $largeImage->store('uploads/product_large');
-                $product->productImages()->create(['large_image' => $path]);
-            }
+            $file = $request->file('large_image');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $file->move('uploads/product_large/', $filename);
+            $product->productImages()->create(['large_image' => "uploads/product_large/$filename"]);
         }
 
         // Store a success message in the session
@@ -100,7 +100,6 @@ class ProductController extends Controller
 
         return redirect('/admin/products');
     }
-
     public function edit(Product $product)
     {
         $departments = Department::all(); // Assuming you have a Department model
@@ -129,5 +128,9 @@ class ProductController extends Controller
         return Excel::download(new ProductExport(), 'products.xlsx');
     }
 
+    public function show(Product $product)
+    {
+        return view('admin.products.show', compact('product'));
+    }
 
 }

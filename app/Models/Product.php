@@ -89,18 +89,18 @@ class Product extends Model
         return $this->hasMany(ProductThumbnail::class, 'product_id', 'id');
     }
 
-    public function getImageUrlsAttribute()
-    {
-        return $this->productImages->pluck('url')->implode(',');
-    }
+    // public function getImageUrlsAttribute()
+    // {
+    //     return $this->productImages->pluck('url')->implode(',');
+    // }
 
-    /**
-     * Accessor for getting thumbnail URLs associated with the product.
-     *
-     * @return string
-     */
-    public function getThumbnailUrlsAttribute()
-    {
-        return $this->productThumbnails->pluck('url')->implode(',');
-    }
+    // /**
+    //  * Accessor for getting thumbnail URLs associated with the product.
+    //  *
+    //  * @return string
+    //  */
+    // public function getThumbnailUrlsAttribute()
+    // {
+    //     return $this->productThumbnails->pluck('url')->implode(',');
+    // }
 }

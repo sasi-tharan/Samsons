@@ -247,7 +247,7 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="">Upload Product Images</label>
-                                    <input type="file" multiple name="large_image[]" class="form-control" />
+                                    <input type="file"  name="large_image" class="form-control" />
                                 </div>
                             </div>
                         </div>

@@ -104,6 +104,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/products', 'index')->name('admin.products.index'); // Define the index route
         Route::get('/products/create', 'create')->name('admin.products.create');
         Route::post('/products/create', 'store')->name('admin.products.store');
+        Route::get('/products/{product}', 'show')->name('admin.products.show'); // View product route
         Route::get('/products/{product}/edit', 'edit')->name('admin.products.edit');
         Route::post('/products/import', 'import')->name('admin.products.import');
     });
